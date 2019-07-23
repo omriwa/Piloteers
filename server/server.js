@@ -1,23 +1,14 @@
 const express = require('express');
 const server = express();
 const bodyParser = require('body-parser');
-const fileHelper = require('./helpers/fileHelper');
-const path = require('path');
+const apiRouter = require('./routes/apiRoute');
 
 // CONFIGURATION
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 
 // ROUTES
-server.get('/', (req, res) => {
-    const dirPath = path.join(__dirname,'uploadedJson');
-
-    fileHelper.getFilesContextFromDir(dirPath, res);
-});
-
-server.post('/', (req, res) => {
-    res.send('post');
-});
+server.use('/api', apiRouter);
 
 // LISTENING 
 server.listen(8080, e => {
