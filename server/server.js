@@ -1,6 +1,8 @@
 const express = require('express');
 const server = express();
 const bodyParser = require('body-parser');
+const fileHelper = require('./helpers/fileHelper');
+const path = require('path');
 
 // CONFIGURATION
 server.use(bodyParser.urlencoded({ extended: true }));
@@ -8,7 +10,9 @@ server.use(bodyParser.json());
 
 // ROUTES
 server.get('/', (req, res) => {
-    res.send('work');
+    const dirPath = path.join(__dirname,'uploadedJson');
+
+    fileHelper.getFilesContextFromDir(dirPath, res);
 });
 
 server.post('/', (req, res) => {
