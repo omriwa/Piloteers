@@ -106,6 +106,7 @@ class App extends React.Component<IAppProps, IAppState>{
                         .map(key => <div key={this.state.locationToUpload + '-' + key}>
                             <label>{key} :</label>
                             <input
+                                required
                                 type={typeof (this.state.locationToUpload as any)[key]}
                                 value={(this.state.locationToUpload as any)[key]}
                                 onChange={e => this.onChangeLocationFormInput(e,key)}
