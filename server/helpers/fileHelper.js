@@ -29,4 +29,16 @@ const getFilesContextFromDir = (dirPath, res) => {
     });
 }
 
-module.exports = { getFilesContextFromDir}
+const writeJsonDataIntoJsonFile = (dirPath, data, res) => {
+    fs.writeFile(dirPath + '\\' + data.name + '.json', JSON.stringify(data), 'utf8', (e, callbackData) => {
+        if (e) {
+            console.log('error in writing json file');
+            res.status(500);
+        }
+        else {
+            res.status(200);
+        }
+    });
+}
+
+module.exports = { getFilesContextFromDir, writeJsonDataIntoJsonFile}

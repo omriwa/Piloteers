@@ -17,7 +17,10 @@ apiRouter.get('/locations', (req, res, next) => {
 });
 
 apiRouter.post('/locations', (req, res, next) => {
-    res.send('post');
+    const dirPath = path.resolve('./uploadedJson');
+    const data = req.body.locationData
+
+    fileHelper.writeJsonDataIntoJsonFile(dirPath, data, res);
 });
 
 module.exports = apiRouter;

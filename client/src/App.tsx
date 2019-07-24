@@ -42,18 +42,22 @@ class App extends React.Component<IAppProps, IAppState>{
     componentDidMount() {
         // fetch locations from server
         if (!this.state.fetchedLocations) {
-            axios.get('http://localhost:8080/api/locations')
-                .then(result => {
-                    this.setState({ error: result.status === 200 ? '' : 'There was fetch problem in the server' });
-
-                    return result.data;
-                })
-                .then(fetchedLocations => this.setState({ fetchedLocations }))
-                .catch(e => {
-                    alert('fetch problem from client, please check console');
-                    console.log('fetch problem by client', e);
-                });
+            this.getLocationsFromApi();
         }
+    }
+
+    private getLocationsFromApi = () => {
+        axios.get('http://localhost:8080/api/locations')
+            .then(result => {
+                this.setState({ error: result.status === 200 ? '' : 'There was fetch problem in the server' });
+
+                return result.data;
+            })
+            .then(fetchedLocations => this.setState({ fetchedLocations }))
+            .catch(e => {
+                alert('fetch problem from client, please check console');
+                console.log('fetch problem by client', e);
+            });
     }
 
     private renderLocations = () => {
@@ -81,8 +85,10 @@ class App extends React.Component<IAppProps, IAppState>{
     }
 
     private uploadLocation = () => {
-        axios.post('http://localhost:8080/api/locations', this.state.locationToUpload)
-            .then(result => console.log('upload', result))
+        axios.post('http://localhost:8080/api/locations', { locationData: this.state.locationToUpload })
+            .then(result => {
+                result.status === 200 ? this.getLocationsFromApi() : this.setState({ error: 'could not write data in server' });
+            })
             .catch(e => {
                 console.log('error in upload data file', e);
             })
@@ -100,6 +106,7 @@ class App extends React.Component<IAppProps, IAppState>{
                         .map(key => <div key={this.state.locationToUpload + '-' + key}>
                             <label>{key} :</label>
                             <input
+                                type={typeof (this.state.locationToUpload as any)[key]}
                                 value={(this.state.locationToUpload as any)[key]}
                                 onChange={e => this.onChangeLocationFormInput(e,key)}
                             />
